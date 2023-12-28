@@ -22,6 +22,9 @@ def add_black_background(input_image_path, output_image_path):
     # Place the input image onto the center of the black square background
     background[y_center:y_center + input_image.shape[0], x_center:x_center + input_image.shape[1]] = input_image
 
+    if os.path.exists(output_image_path):
+        os.remove(output_image_path)
+
     # Save the combined image as JPEG
     cv2.imwrite(output_image_path, background, [int(cv2.IMWRITE_JPEG_QUALITY), 50])
 
@@ -44,6 +47,8 @@ def add_white_background(input_image_path, output_image_path):
     # Place the input image onto the center of the white square background
     background[y_center:y_center + input_image.shape[0], x_center:x_center + input_image.shape[1]] = input_image
 
+    if os.path.exists(output_image_path):
+        os.remove(output_image_path)
     # Save the combined image as JPEG
     cv2.imwrite(output_image_path, background, [int(cv2.IMWRITE_JPEG_QUALITY), 50])
 
@@ -51,7 +56,8 @@ def add_white_background(input_image_path, output_image_path):
 def walk_through(dest_path: str, white=True):
     for root, dirs, files in os.walk(dest_path, topdown=False):
         for name in files:
-            if name.endswith(".jpg") or name.endswith(".jpeg"):
+            if name.endswith(".jpg") or name.endswith(".jpeg") and not name.startswith("bbg_") and not name.startswith(
+                    "wbg_"):
                 if white:
                     add_white_background(os.path.join(root, name), os.path.join(root, f"wbg_{name}"))
                 else:
@@ -64,3 +70,4 @@ def main(dest_path, white):
 
 if __name__ == '__main__':
     main(sys.argv[1], False)
+    main(sys.argv[1], True)
