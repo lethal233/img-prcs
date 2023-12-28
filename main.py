@@ -51,10 +51,11 @@ def add_white_background(input_image_path, output_image_path):
 def walk_through(dest_path: str, white=True):
     for root, dirs, files in os.walk(dest_path, topdown=False):
         for name in files:
-            if white:
-                add_white_background(os.path.join(root, name), os.path.join(root, f"wbg_{name}"))
-            else:
-                add_black_background(os.path.join(root, name), os.path.join(root, f"bbg_{name}"))
+            if name.endswith(".jpg") or name.endswith(".jpeg"):
+                if white:
+                    add_white_background(os.path.join(root, name), os.path.join(root, f"wbg_{name}"))
+                else:
+                    add_black_background(os.path.join(root, name), os.path.join(root, f"bbg_{name}"))
 
 
 def main(dest_path, white):
